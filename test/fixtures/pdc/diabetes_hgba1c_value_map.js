@@ -42,6 +42,11 @@ function map(patient) {
     function hasMatchingLabValue() {
         for (var i = 0; i < resultList.length; i++) {
             if (resultList[i].includesCodeFrom(targetLabCodes) && resultList[i].timeStamp() > start) {
+                // Emit excluded when resultList[] exists, but empty
+                if(resultList[i].values() === null || resultList[i].values === undefined || resultList[i].values.length === 0) {
+                    emit('excluded', 1);
+                    continue;
+                }
                 if (resultList[i].values()[0].units() !== null &&
                     resultList[i].values()[0].units().toLowerCase() === "%".toLowerCase()) {
                     if (resultList[i].values()[0].scalar() <= hgba1cLimit) {
