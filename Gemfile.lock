@@ -1,7 +1,7 @@
 GIT
-  remote: http://github.com/scoophealth/health-data-standards.git
+  remote: http://github.com/physiciansdatacollaborative/health-data-standards.git
   revision: 8caf81d44431b486a109545e2b04fda248f8cdc1
-  branch: scoop-develop
+  branch: master
   specs:
     health-data-standards (2.1.4)
       builder (~> 3.0.0)
@@ -12,9 +12,9 @@ GIT
       uuid (~> 2.3.5)
 
 GIT
-  remote: http://github.com/scoophealth/hqmf-parser.git
+  remote: http://github.com/physiciansdatacollaborative/hqmf-parser.git
   revision: 7255b22df28004a00721209b8a9f3ff708c2028d
-  branch: scoop-develop
+  branch: master
   specs:
     hqmf-parser (1.1.0)
       google-spreadsheet-ruby (= 0.1.8)
@@ -23,9 +23,9 @@ GIT
       spreadsheet (= 0.6.8)
 
 GIT
-  remote: http://github.com/scoophealth/hqmf2js.git
+  remote: http://github.com/physiciansdatacollaborative/hqmf2js.git
   revision: cfc4af98da3f516899c9614ecd673d7f23e9e461
-  branch: scoop-develop
+  branch: master
   specs:
     hqmf2js (0.1.0)
       coffee-script (~> 2.2.0)
@@ -34,7 +34,7 @@ GIT
       tilt (~> 1.4.1)
 
 GIT
-  remote: http://github.com/scoophealth/patientapi.git
+  remote: http://github.com/physiciansdatacollaborative/patientapi.git
   revision: 8cfb50a53396180b652737f406d5cc2d9e5e3cb5
   branch: master
   specs:

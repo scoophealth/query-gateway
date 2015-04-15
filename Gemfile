@@ -16,14 +16,10 @@ gem 'mongoid'
 gem 'delayed_job'
 gem 'delayed_job_mongoid'
 
-gem 'hquery-patient-api', :git => 'http://github.com/scoophealth/patientapi.git', :branch => 'master'
-#gem 'hquery-patient-api', path: '../patientapi'
-gem "health-data-standards", :git => 'http://github.com/scoophealth/health-data-standards.git', :branch => 'scoop-develop'
-#gem 'health-data-standards', path: '../health-data-standards'
-#gem "health-data-standards", :git => 'http://github.com/scoophealth/health-data-standards.git', :branch => 'scoop-e2e-1.35'
-gem "hqmf2js", :git => 'http://github.com/scoophealth/hqmf2js.git', :branch => 'scoop-develop'
-#gem 'hqmf2js', path: '../hqmf2js'
-gem 'hqmf-parser', :git => 'http://github.com/scoophealth/hqmf-parser.git', :branch => 'scoop-develop'
+gem 'hquery-patient-api', :git => 'http://github.com/physiciansdatacollaborative/patientapi.git', :branch => 'master', :tag => 'pdc-0.1.0'
+gem "health-data-standards", :git => 'http://github.com/physiciansdatacollaborative/health-data-standards.git', :branch => 'master', :tag => 'pdc-0.1.0'
+gem "hqmf2js", :git => 'http://github.com/physiciansdatacollaborative/hqmf2js.git', :branch => 'master', :tag => 'pdc-0.1.0'
+gem 'hqmf-parser', :git => 'http://github.com/physiciansdatacollaborative/hqmf-parser.git', :branch => 'master', :tag => 'pdc-0.1.0'
 
 gem 'coderay'
 
@@ -47,4 +43,3 @@ end
 #group :production do
 #  gem 'thin'
 #end
-
