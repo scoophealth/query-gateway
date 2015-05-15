@@ -53,9 +53,18 @@ class RecordsController < ApplicationController
             else
               patient[:_id] = patient[:hash_id]
             end
+	    
+	    provider_id = patient.primary_care_provider_id
+	    if provider_id
+      	      provider_hash = OpenSSL::Digest::SHA224.new
+	      provider_hash << provider_id 
+	      patient.primary_care_provider_id = Base64.strict_encode64(provider_hash.digest)
+	    end 
             # patient.save! isn't working as documented, don't know why
             # appears that it should but upsert does what we need.  See
             #  http://mongoid.org/en/mongoid/docs/persistence.html
+	    puts "SOME DEBUG TEXT"
+	    puts patient.primary_care_provider_id
             patient.upsert
             render :text => 'E2E Document imported', :status => 201
         # C32
