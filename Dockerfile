@@ -14,7 +14,6 @@ RUN apt-get update; \
     apt-get upgrade -y; \
     apt-get install -y \
       autossh \
-      lynx \
       mongodb \
       unzip
 
@@ -28,6 +27,12 @@ RUN ( \
       echo "# Exit on errors or unitialized variables"; \
       echo "#"; \
       echo "set -e -o nounset"; \
+      echo ""; \
+      echo ""; \
+      echo "# Start MongoDB"; \
+      echo "#"; \
+      echo "service mongodb start"; \
+      echo ""; \
       echo ""; \
       echo "# Wait until SSH keys are ready"; \
       echo "#"; \
@@ -49,8 +54,6 @@ RUN ( \
       echo "#"; \
       echo "cd /app/"; \
       echo "/sbin/setuser app bundle install --path vendor/bundle"; \
-      echo "#exec /sbin/setuser app '/app/runme.sh'"; \
-      echo "/sbin/setuser app bundle install"; \
       echo "/sbin/setuser app bundle exec script/delayed_job start"; \
       echo "exec /sbin/setuser app bundle exec rails server -p 3001"; \
       echo "/sbin/setuser app bundle exec script/delayed_job stop"; \
@@ -66,7 +69,7 @@ COPY . .
 RUN mkdir -p ./tmp/pids ./util/files
 RUN gem install multipart-post
 #RUN bundle install --path vendor/bundle
-#RUN sed -i -e "s/localhost:27017/epdb:27017/" config/mongoid.yml
+RUN sed -i -e "s/localhost:27017/epdb:27017/" config/mongoid.yml
 RUN chown -R app:app /app/
 
 
