@@ -15,32 +15,8 @@ RUN apt-get update; \
     apt-get install -y \
       autossh \
       lynx \
+      mongodb \
       unzip
-
-
-# Branch to use from GitHub
-#
-ENV BRANCH pdc-0.1.0
-
-
-# Clone repo, assign to app
-#
-WORKDIR /app/
-RUN git clone -b ${BRANCH} https://github.com/physiciansdatacollaborative/endpoint.git .
-RUN mkdir -p /app/tmp/pids /app/util/files
-RUN chown -R app:app /app/
-
-
-# Configure Endpoint (run bundler as non-root)
-#
-RUN /usr/bin/gem install multipart-post
-RUN /sbin/setuser app bundle install --path vendor/bundle
-RUN sed -i -e "s/localhost:27017/epdb:27017/" config/mongoid.yml
-
-
-# Add hub public key
-#
-COPY ./known_hosts /root/.ssh/
 
 
 # Create startup script and make it executable
@@ -72,10 +48,26 @@ RUN ( \
       echo "# Start Endpoint"; \
       echo "#"; \
       echo "cd /app/"; \
-      echo "exec /sbin/setuser app '/app/runme.sh'"; \
+      echo "/sbin/setuser app bundle install --path vendor/bundle"; \
+      echo "#exec /sbin/setuser app '/app/runme.sh'"; \
+      echo "/sbin/setuser app bundle install"; \
+      echo "/sbin/setuser app bundle exec script/delayed_job start"; \
+      echo "exec /sbin/setuser app bundle exec rails server -p 3001"; \
+      echo "/sbin/setuser app bundle exec script/delayed_job stop"; \
     )  \
     >> /etc/service/app/run
 RUN chmod +x /etc/service/app/run
+
+
+# Prepare /app/ folder
+#
+WORKDIR /app/
+COPY . .
+RUN mkdir -p ./tmp/pids ./util/files
+RUN gem install multipart-post
+#RUN bundle install --path vendor/bundle
+#RUN sed -i -e "s/localhost:27017/epdb:27017/" config/mongoid.yml
+RUN chown -R app:app /app/
 
 
 # Create key exchange script, uses a wait file (/app/wait)
@@ -83,7 +75,7 @@ RUN chmod +x /etc/service/app/run
 RUN ( \
       echo "#!/bin/bash"; \
       echo "#"; \
-      echo "# Exit on errors or unitialized variables"; \
+      echo "# Exit on errors or uninitialized variables"; \
       echo "#"; \
       echo "set -e -o nounset"; \
       echo ""; \
@@ -100,8 +92,11 @@ RUN ( \
       echo ""; \
       echo "# Wait 5 seconds and remove the hold on Endpoint startup"; \
       echo "#"; \
-      echo "sleep 5"; \
-      echo "rm /app/wait"; \
+      echo "if test -e /app/wait"; \
+      echo "then"; \
+      echo "  sleep 5"; \
+      echo "  rm /app/wait"; \
+      echo "fi"; \
     )  \
     >> /app/key_exchange.sh
 RUN chmod +x /app/key_exchange.sh
