@@ -18,9 +18,9 @@ RUN apt-get update; \
       unzip
 
 
-# Create startup script and make it executable
+# Start MongoDB
 #
-RUN mkdir -p /etc/service/app
+RUN mkdir -p /etc/service/mongodb/
 RUN ( \
       echo "#!/bin/bash"; \
       echo "#"; \
@@ -31,7 +31,23 @@ RUN ( \
       echo ""; \
       echo "# Start MongoDB"; \
       echo "#"; \
-      echo "service mongodb start"; \
+      echo "mkdir -p /var/lib/mongodb/"; \
+      echo "mkdir -p /data/db"; \
+      echo "mongod --smallfiles"; \
+    )  \
+    >> /etc/service/mongodb/run
+RUN chmod +x /etc/service/mongodb/run
+
+
+# Create startup script and make it executable
+#
+RUN mkdir -p /etc/service/app
+RUN ( \
+      echo "#!/bin/bash"; \
+      echo "#"; \
+      echo "# Exit on errors or unitialized variables"; \
+      echo "#"; \
+      echo "set -e -o nounset"; \
       echo ""; \
       echo ""; \
       echo "# Wait until SSH keys are ready"; \
@@ -53,7 +69,6 @@ RUN ( \
       echo "# Start Endpoint"; \
       echo "#"; \
       echo "cd /app/"; \
-      echo "/sbin/setuser app bundle install --path vendor/bundle"; \
       echo "/sbin/setuser app bundle exec script/delayed_job start"; \
       echo "exec /sbin/setuser app bundle exec rails server -p 3001"; \
       echo "/sbin/setuser app bundle exec script/delayed_job stop"; \
@@ -68,9 +83,7 @@ WORKDIR /app/
 COPY . .
 RUN mkdir -p ./tmp/pids ./util/files
 RUN gem install multipart-post
-#RUN bundle install --path vendor/bundle
-RUN sed -i -e "s/localhost:27017/epdb:27017/" config/mongoid.yml
-RUN chown -R app:app /app/
+RUN bundle install --path vendor/bundle
 
 
 # Create key exchange script, uses a wait file (/app/wait)
@@ -104,6 +117,7 @@ RUN ( \
     >> /app/key_exchange.sh
 RUN chmod +x /app/key_exchange.sh
 RUN touch /app/wait
+RUN chown -R app:app /app/
 
 
 # Run initialization command
