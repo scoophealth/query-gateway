@@ -53,4 +53,10 @@ class SysinfoController < ApplicationController
     render :text => textstr, :status =>201
   end
 
+  def delayed_job
+    textstr = `#{NAGIOS_PLUGINS}/check_procs  -w 1:1 -c 1:1 -u pdcadmin -a delayed_job`
+    textstr += 'Status Code: ' + $?.exitstatus.to_s + "\n"
+    render :text => textstr, :status =>201
+  end
+
 end

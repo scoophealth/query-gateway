@@ -8,6 +8,7 @@ QueryGateway::Application.routes.draw do
   get 'sysinfo/swap', :constraints => {:ip => /127.0.0.1/}
   get 'sysinfo/import', :constraints => {:ip => /127.0.0.1/}
   get 'sysinfo/tomcat', :constraints => {:ip => /127.0.0.1/}
+  get 'sysinfo/delayed_job', :constraints => {:ip => /127.0.0.1/}
 
   resources :results, :only => [:index, :show]
   

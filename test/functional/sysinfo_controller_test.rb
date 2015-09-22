@@ -2,12 +2,12 @@ require 'test_helper'
 
 class SysinfoControllerTest < ActionController::TestCase
   test "should get currentload" do
-    get :currentload
+    get :load
     assert_response :success
   end
 
   test "should get currentusers" do
-    get :currentusers
+    get :users
     assert_response :success
   end
 
@@ -22,12 +22,27 @@ class SysinfoControllerTest < ActionController::TestCase
   end
 
   test "should get totalprocesses" do
-    get :totalprocesses
+    get :processes
     assert_response :success
   end
 
   test "should get swap" do
     get :swap
+    assert_response :success
+  end
+
+  test "should get import" do
+    get :import
+    assert_response :success
+  end
+
+  test "should get tomcat" do
+    get :import
+    assert_response :success
+  end
+
+  test "should get delayed_job" do
+    get :delayed_job
     assert_response :success
   end
 
