@@ -56,6 +56,8 @@ class RecordsController < ApplicationController
             ### Example of how to capture E2E document for debugging purposes
             ### if patient[:_id] == '149'
             ###   File.open("#{Rails.root}/log/149.xml", 'wb') { |file| file.write(xml_file) }
+            ### filename=patient[:_id]
+            ### File.open("#{Rails.root}/log/#{filename}.xml", 'wb') { |file| file.write(xml_file) }
             ### end
             # patient.save! isn't working as documented, don't know why
             # appears that it should but upsert does what we need.  See
